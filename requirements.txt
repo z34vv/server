@@ -1,0 +1,11 @@
+Django
+djangorestframework
+pycountry
+phonenumbers
+Pillow
+django-widget-tweaks
+django-oauth-toolkit
+channels
+django-htmx
+channels_redis
+daphne
