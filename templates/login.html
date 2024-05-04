@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+    <title>Login</title>
+</head>
+{% load widget_tweaks %}
+<body>
+<section>
+    <img src="{% static 'images/loginBackground.jpg' %}" alt="" class="bg">
+
+
+    <div class="login">
+        <form method="post">
+            {% csrf_token %}
+            {% for key, value in form.errors.items %}
+            {{value}}
+            {% endfor %}
+            <h2>Đăng Nhập</h2>
+            <form action=".">
+                <div class="inputBox">
+                    {% render_field form.username type="text" placeholder="Tài khoản" %}
+                </div>
+                <div class="inputBox">
+                    {% render_field form.password type="password" placeholder="Mật khẩu" %}
+                </div>
+                <input type="hidden" name="next" value="/">
+                <div class="inputBox">
+                    <input type="submit" value="Đăng nhập">
+                </div>
+                <p class="forget">Quên mật khẩu? <a href="#">Bấm vào đây</a></p>
+                <p class="forget">Chưa có tài khoản? <a href="{% url 'register' %}">Đăng ký</a></p>
+            </form>
+        </form>
+    </div>
+</section>
+</body>
+</html>

@@ -1,0 +1,125 @@
+{% extends "chat/chatIndex.html" %}
+
+{% load static %}
+
+{% block content %}
+<div class="py-2 px-4 border-bottom d-none d-lg-block">
+    <div class="d-flex align-items-center py-1">
+        <div class="position-relative">
+            <img
+                    src="../media/{{partner.avatar}}"
+                    class="rounded-circle mr-1"
+                    alt="{{partner.username}}"
+                    style="width: 40px; height: 40px"
+            />
+        </div>
+        <div class="flex-grow-1 pl-3">
+            <strong>{{partner.username}}</strong>
+            <div class="text-muted small">
+                <em>Online</em>
+            </div>
+        </div>
+        <div class="flex justify-center items-center" style="margin-right:16px;">
+            <button class="btn btn-primary btn-lg mr-1 px-3">
+                <svg xmlns="http://www.w3.org/2000/svg" style="width: 24px; height: 24px;"
+                     viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}
+                     strokeLinecap="round" strokeLinejoin="round"
+                     class="feather feather-phone feather-lg">
+                    <path
+                            d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                </svg>
+            </button>
+            <button class="btn btn-info btn-lg mr-1 px-3 d-none d-md-inline-block">
+                <svg xmlns="http://www.w3.org/2000/svg" style="width: 24px; height: 24px;"
+                     viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}
+                     strokeLinecap="round" strokeLinejoin="round"
+                     class="feather feather-video feather-lg">
+                    <polygon points="23 7 16 12 23 17 23 7"/>
+                    <rect x={1} y={5} width={15} height={14} rx={2} ry={2}>
+                    </rect>
+                </svg>
+            </button>
+
+            <div class="dropdown">
+                <button class="drop_btn">
+                    <img src="{% static 'images/icons/gift.svg' %}" alt="Donate" style="width: 30px; height: 30px;">
+                </button>
+                <div class="dropdown-content">
+                    <li>
+                        <a class="dropdown-item" href="donate-gift/1/">
+                            <img src="{% static  'images/icons/rose.svg' %}" alt="Rose">
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="donate-gift/2/">
+                            <img src="{% static  'images/icons/phone-portrait.svg' %}" alt="Phone">
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="donate-gift/3/">
+                            <img src="{% static  'images/icons/car-sport.svg' %}" alt="Car">
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="donate-gift/4/">
+                            <img src="{% static  'images/icons/airplane.svg' %}" alt="Airplane">
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="donate-gift/5/">
+                            <img src="{% static  'images/icons/rocket.svg' %}" alt="Rocket">
+                        </a>
+                    </li>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+</div>
+
+<div class="position-relative">
+    <div id="chat_msgs" class="chat-messages p-4" style="height:680px">
+        {% for msg in msgs %}
+        {% include 'chat/chat_msg.html' %}
+        {% endfor %}
+    </div>
+</div>
+
+<form hx-post="{% url 'send-msg' partner.username %}"
+      hx-target="#chat_msgs"
+      hx-swap="beforeend"
+      hx-trigger="submit"
+      _="on htmx:afterRequest reset() me"
+      id="chatForm">
+    {% csrf_token %}
+    <div class="flex-grow-0 py-3 px-4 border-top" style="top: 0;">
+        <div class="input-group">
+            <input type="text"
+                   class="form-control"
+                   placeholder="Type your message"
+                   name="content"
+                   id="messageInput"/>
+            <input type="submit" class="btn btn-primary" value="Send"/>
+        </div>
+    </div>
+</form>
+{% endblock %}
+
+<script>
+    document.getElementById('messageInput').addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            document.getElementById('chatForm').dispatchEvent(new Event('submit', {bubbles: true}));
+        }
+    });
+
+    document.body.addEventListener('htmx:afterSwap', function(event) {
+        if (event.target.id === 'chat_msgs') {
+            var newMessage = event.detail.elt;
+            newMessage.classList.add('fade-in-up');
+            window.scrollTo(0,document.body.scrollHeight);
+        }
+    });
+</script>

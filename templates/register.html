@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/register.css' %}">
+    <title>Register</title>
+</head>
+{% load widget_tweaks %}
+<body>
+<section>
+    <img src="{% static 'images/loginBackground.jpg' %}" alt="" class="bg">
+    <div class="register">
+        <form name="form" method="post" onsubmit="return validateForm()">
+            <h2>Đăng ký</h2>
+            {% csrf_token %}
+
+            <!--Username-->
+            <div class="inputBox">
+                {% render_field form.username type="text" placeholder="Tài khoản" %}
+            </div>
+
+            <!--Email-->
+            <div class="inputBox">
+                {% render_field form.email type="text" placeholder="Email" %}
+            </div>
+
+            <div class="inputBox">
+                {% render_field form.phone type="text" placeholder="Số Điện Thoại" %}
+            </div>
+
+            <!--Password-->
+            <div class="inputBox">
+                {% render_field form.password type="password" id="password" placeholder="Mật khẩu" %}
+                <div class="show"></div>
+            </div>
+
+            <!-- Confirm password -->
+
+
+            <div class="inputBox">
+                {% render_field form.first_name type="text" placeholder="Tên" %}
+            </div>
+
+            <div class="inputBox">
+                {% render_field form.last_name type="text" placeholder="Họ" %}
+            </div>
+
+            <div class="inputBox">
+                {% render_field form.day_of_birth type="date" placeholder="Ngày sinh" %}
+            </div>
+
+            <div class="genderInput">
+                {% render_field form.gender type="radio" %}
+            </div>
+
+            <input type="hidden">
+            <div class="inputBox">
+                <input type="submit" value="Đăng ký" id="btn">
+            </div>
+            <div class="group">
+                <p>Đã có tài khoản? <a href="{% url 'login' %}">Đăng nhập</a></p>
+            </div>
+        </form>
+    </div>
+</section>
+
+<script>
+        var pswd = document.getElementById("password");
+
+        let show = document.querySelector('.show');
+        show.onclick = function(){
+            if (pswd.type == 'password'){
+                pswd.setAttribute('type', 'text');
+                show.classList.add('hide');
+            }else {
+                pswd.setAttribute('type', 'password');
+                show.classList.remove('hide');
+            }
+        }
+
+<!--        function validateForm() {-->
+<!--        var username = document.forms["form"]["username"].value;-->
+<!--        var email = document.forms["form"]["email"].value;-->
+<!--        var password = document.forms["form"]["password"].value;-->
+<!--        var confirm_password = document.forms["form"]["repassword"].value;-->
+<!--        if (username == "" || password == "" || reassword == "") {-->
+<!--            alert("Vui lòng nhập đầy đủ thông tin đăng ký!");-->
+<!--            return false;-->
+<!--        } else{-->
+<!--            if (!email.includes('@') || !email.includes('.')) {-->
+<!--                alert("Email không hợp lệ!");-->
+<!--                return false;-->
+<!--            } else {-->
+<!--                let mail_item = email.split('@');-->
+<!--                if (mail_item[0] === '') {-->
+<!--                    alert("Email không hợp lệ!");-->
+<!--                    return false;-->
+<!--                } else {-->
+<!--                    mail_item = mail_item[1].split('.');-->
+<!--                    if (mail_item[0] === '' || mail_item[1] === '') {-->
+<!--                        alert("Email không hợp lệ!");-->
+<!--                        return false;-->
+<!--                    }-->
+<!--        }-->
+
+
+</script>
+</body>
+</html>

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Message</title>
+    <link rel="stylesheet" href="{% static 'css/chat.css' %}"/>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{% static 'css/bootstrap-5.3.3-dist/css/bootstrap.min.css' %}" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+      integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <script src="https://unpkg.com/htmx.org@1.9.12/dist/htmx.min.js"></script>
+    <script src="https://unpkg.com/hyperscript.org@0.9.12"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.12/dist/ext/ws.js"></script>
+</head>
+
+<body>
+<main class="content mt-[78px] ml-[78px]">
+    <div class="container-2xl p-0">
+        <div class="card">
+            <div class="row g-0">
+                <div class="col-12 col-lg-5 col-xl-3 border-r">
+                    <div class="px-4 d-none d-md-block">
+                        <div class="d-flex align-items-center">
+                            <div class="flex-grow-1">
+                                <form method="get" action="{% url 'msg-search-user' %}">
+                                    <input
+                                            type="text"
+                                            class="form-control my-3"
+                                            placeholder="Search..."
+                                            name="query"
+                                    />
+                                    <input type="submit" value="Search" style="display: none;">
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    {% for msg in last_msgs %}
+                    {% if user == msg.sender %}
+                    <a href="{% url 'chat' %}{{msg.receiver.username}}"
+                       class="list-group-item list-group-item-action border-0">
+                        <div class="badge bg-success float-right"></div>
+
+                        <div class="d-flex align-items-start mx-4 mb-3">
+                            <img
+                                    src="../media/{{msg.receiver.avatar}}"
+                                    class="rounded-circle mr-1"
+                                    alt="{{msg.receiver.username}}"
+                                    style="width: 40px; height: 40px"
+                            />
+                            <div class="flex-grow-1 ml-3">
+                                <b>{{msg.receiver}}</b>
+                                <div class="small">
+                                    Bạn: {{msg.content}}
+                                    <span class="fas fa-circle chat-online"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+
+                    {% else %}
+                    <a href="{% url 'chat' %}{{msg.sender.username}}"
+                       class="list-group-item list-group-item-action border-0">
+                        <div class="badge bg-success float-right"></div>
+
+                        <div class="d-flex align-items-start mx-4 mb-3">
+                            <img
+                                    src="../media/{{msg.sender.avatar}}"
+                                    class="rounded-circle mr-1"
+                                    alt="{{msg.sender.username}}"
+                                    style="width: 40px; height: 40px"
+                            />
+                            <div class="flex-grow-1 ml-3">
+                                {% if msg.is_read %}
+                                {{msg.sender}}
+                                {% else %}
+                                <b>{{msg.sender}}</b>
+                                {% endif %}
+                                <div class="small">
+                                    {{msg.content}}
+                                    <span class="fas fa-circle chat-online"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                    {% endif %}
+
+                    {% endfor %}
+                    <hr class="d-block d-lg-none mt-1 mb-0"/>
+                </div>
+                <div class="col-12 col-lg-7 col-xl-9" style="min-height: 800px">
+                    {% block content %}{% endblock %}
+                </div>
+
+            </div>
+        </div>
+    </div>
+</main>
+<script src="/bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    function scrollToBottom() {
+      const container = document.getElementById("chat_msgs");
+      container.scrollTop = container.scrollHeight;
+    }
+    scrollToBottom();
+</script>
+
+</body>
+</html>

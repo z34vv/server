@@ -1,0 +1,32 @@
+{% if user == msg.sender %}
+<!-- My Message -->
+<div class="chat-message-right pb-4 flex flex-col fade-in-up" id="msg-content">
+    <div class="flex-shrink-1 rounded py-2 px-3 h-max my_msgs">
+        {{msg.content}}
+    </div>
+    <div class="flex justify-content-end">
+        <!--        <div class="text-muted small text-nowrap mt-2">-->
+        <!--            {{msg.created_at_formatted}}-->
+        <!--        </div>-->
+    </div>
+</div>
+{% else %}
+<!-- Partner Message -->
+<div class="chat-message-left pb-4 fade-in-up" id="msg-content">
+    <div class="">
+        <img
+                src="../media/{{msg.sender.avatar}}"
+                class="rounded-circle mr-1"
+                alt="{{msg.sender.username}}"
+                style="width: 40px; height: 40px"
+        />
+        <!--        <div class="text-muted small text-nowrap mt-2">-->
+        <!--            {{msg.created_at_formatted}}-->
+        <!--        </div>-->
+    </div>
+    <div class="flex-shrink-1 bg-light rounded py-2 px-3 h-max">
+        {{msg.content}}
+    </div>
+</div>
+{% endif %}
+
